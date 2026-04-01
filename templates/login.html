@@ -38,6 +38,15 @@ body {
   text-align: center;
   font-weight: bold;
   font-size: 20px;
+  margin-bottom: 5px; /* 利用者数表示のために少し余白を詰める */
+}
+
+/* 利用者数表示（新規追加） */
+.user-count {
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
   margin-bottom: 15px;
 }
 
@@ -52,6 +61,7 @@ input {
   border: 2px solid #000;
   background: #fff;
   font-family: inherit;
+  box-sizing: border-box; /* 枠線のはみ出し防止 */
 }
 
 /* ボタン（ゲーム風） */
@@ -98,12 +108,16 @@ a {
 
   .game-box {
     width: 80%;
-    height: 40vh;
-    padding: 10px;
+    height: auto; /* 画面がはみ出ないようにautoに変更 */
+    padding: 15px;
   }
 
   .title {
     font-size: 18px;
+  }
+
+  .user-count {
+    font-size: 13px;
   }
 
   input {
@@ -111,7 +125,7 @@ a {
   }
 
   .input-box {
-    width: 90%;
+    width: 100%;
   }
  
   button {
@@ -133,6 +147,8 @@ a {
 <div class="game-box">
 
   <div class="title">🔴 ぽこあポケモン管理システム</div>
+  
+  <div class="user-count">▶ 現在の利用者数：{{ user_count }}人</div>
 
   <form method="post">
     <div class="input-box">
