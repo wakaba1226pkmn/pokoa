@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ぽこあポケモン管理システム</title>
 
 <style>
@@ -73,6 +74,7 @@ th {
     position: sticky;
     top: 0;
     background: #ddd;
+    z-index: 1; /* スマホ時のレイアウト崩れ防止用にz-index追加 */
 }
 
 /* プルダウン */
@@ -117,6 +119,134 @@ button:active {
     background: #fff;
     margin-top: 10px;
 }
+
+/* ==========================================
+   スマホ用レスポンシブデザイン（画面幅768px以下）
+   ※PC表示には影響しません
+   ========================================== */
+@media screen and (max-width: 768px) {
+    /* コンテナの余白とサイズをスマホ向けに調整 */
+    .container {
+        width: 95%;
+        padding: 10px;
+        margin: 10px auto;
+        border-width: 3px;
+        box-shadow: 4px 4px 0 #000;
+    }
+
+    /* 上部ステータスを横スクロール可能に */
+    .status-box {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 5px;
+    }
+    .status-box table {
+        white-space: nowrap; /* テキストの折り返しを防ぐ */
+    }
+
+    /* 図鑑テーブルをカード型レイアウトに変更 */
+    .table-container {
+        height: auto;
+        max-height: 60vh;
+        border: none;
+        background: transparent;
+    }
+
+    /* メインのテーブル要素をブロック化して縦並びに */
+    .table-container table, 
+    .table-container thead, 
+    .table-container tbody, 
+    .table-container th, 
+    .table-container td, 
+    .table-container tr {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* PC用のテーブルヘッダーは非表示 */
+    .table-container thead {
+        display: none;
+    }
+
+    /* 1行分を1つのカードとして装飾 */
+    .table-container tr {
+        margin-bottom: 15px;
+        border: 3px solid #000;
+        border-radius: 8px;
+        background: #fff;
+    }
+
+    /* セル（各項目）のレイアウト調整 */
+    .table-container td {
+        position: relative;
+        padding: 10px 10px 10px 35%; /* 左側に擬似要素（見出し）用のスペースを確保 */
+        text-align: right;
+        border: none;
+        border-bottom: 1px dashed #ccc;
+        min-height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .table-container td:last-child {
+        border-bottom: none;
+    }
+
+    /* data-label属性を使ってスマホ用の見出しを表示 */
+    .table-container td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 30%;
+        text-align: left;
+        font-weight: bold;
+        font-size: 0.9em;
+        color: #333;
+    }
+
+    /* フォーム要素の最適化 */
+    select {
+        max-width: 100%;
+        font-size: 16px; /* iOSの自動ズーム防止 */
+    }
+    
+    label {
+        margin-left: 10px;
+    }
+
+    /* 保存ボタンを全幅にして押しやすく */
+    button {
+        width: 100%;
+        font-size: 1.1em;
+        padding: 15px;
+    }
+
+    /* フッターを縦並びに */
+    .footer {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    .message {
+        font-size: 0.9em;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .footer a {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 12px;
+        background: #eee;
+        border: 2px solid #000;
+        text-decoration: none;
+        color: #000;
+        font-weight: bold;
+        box-sizing: border-box;
+    }
+}
 </style>
 
 </head>
@@ -127,7 +257,6 @@ button:active {
 
 <h2>📘 ぽこあポケモン管理システム</h2>
 
-<!-- 街ごとの集計 -->
 <div class="status-box">
 <h3>▶ 街ごとのポケモン数(合計307匹)</h3>
 <table>
@@ -146,10 +275,9 @@ button:active {
 
 <form method="post" action="/bulk_update">
 
-<!-- 図鑑一覧 -->
 <div class="table-container">
 <table>
-
+<thead>
 <tr>
   <th>No</th>
   <th>ポケモン</th>
@@ -158,16 +286,17 @@ button:active {
   <th>街</th>
   <th>出現有無</th>
 </tr>
+</thead>
 
+<tbody>
 {% for p in all_pokemon %}
 <tr>
-  <td>{{ p.id }}</td>
-  <td>{{ p.name }}</td>
-  <td>{{ p.skill1 }}</td>
-  <td>{{ p.skill2 }}</td>
+  <td data-label="No">{{ p.id }}</td>
+  <td data-label="ポケモン">{{ p.name }}</td>
+  <td data-label="得意なこと1">{{ p.skill1 }}</td>
+  <td data-label="得意なこと2">{{ p.skill2 }}</td>
 
-  <!-- 街 -->
-  <td>
+  <td data-label="街">
     <select name="town_{{ p.id }}">
       {% for t in towns %}
       <option value="{{ t }}" {% if p.town == t %}selected{% endif %}>
@@ -177,8 +306,7 @@ button:active {
     </select>
   </td>
 
-  <!-- 出現 -->
-  <td>
+  <td data-label="出現有無">
     <label>
       <input type="radio" name="active_{{ p.id }}" value="1"
       {% if p.is_active == 1 %}checked{% endif %}> 有
@@ -192,6 +320,7 @@ button:active {
 
 </tr>
 {% endfor %}
+</tbody>
 
 </table>
 </div>
@@ -200,7 +329,6 @@ button:active {
 
 </form>
 
-<!-- 下部 -->
 <div class="footer">
     <div class="message">
         ▶ データを保存することでどの街にどのポケモンがいるか分かるよ！

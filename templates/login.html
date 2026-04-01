@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ぽこあポケモン管理システム</title>
 
 <style>
@@ -90,6 +91,37 @@ a {
   border: 3px solid #000;
   background: #fff;
   font-size: 14px;
+}
+
+/* スマホ専用調整 */
+@media (max-width: 480px) {
+
+  .game-box {
+    width: 80%;
+    height: 40vh;
+    padding: 10px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  input {
+    font-size: 16px;
+  }
+
+  .input-box {
+    width: 90%;
+  }
+ 
+  button {
+    font-size: 18px;
+    padding: 16px;
+  }
+
+  .message-box {
+    font-size: 13px;
+  }
 }
 
 </style>

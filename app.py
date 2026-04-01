@@ -208,8 +208,10 @@ def register():
             return render_template("register.html", error=error)
         finally:
             conn.close()
-
-        return redirect("/")
+        
+        # ★ 成功フラグを渡す
+        return render_template("register.html", success=True)
+        # return redirect("/")
 
     return render_template("register.html", error=error)
 
