@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ぽこあポケモン管理システム</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+
+  background-image: url("/static/bk.jpg");
+  background-size: cover;
+  background-position: center;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-family: "Courier New", monospace;
+}
+
+.game-box {
+  width: 320px;
+  background: #f8f8f8;
+  border: 4px solid #000;
+  border-radius: 10px;
+  padding: 20px;
+
+  box-shadow: 6px 6px 0px #000;
+}
+
+.title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.input-box {
+  margin-bottom: 10px;
+}
+
+input {
+  width: 100%;
+  padding: 6px;
+  border: 2px solid #000;
+  background: #fff;
+  font-family: inherit;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+
+  background: #66ccff;
+  border: 3px solid #000;
+  font-weight: bold;
+  cursor: pointer;
+
+  box-shadow: 3px 3px 0px #000;
+}
+
+button:active {
+  box-shadow: none;
+  transform: translate(3px, 3px);
+}
+
+.link {
+  margin-top: 10px;
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+  color: blue;
+}
+
+.message-box {
+  margin-top: 15px;
+  padding: 10px;
+  border: 3px solid #000;
+  background: #fff;
+  font-size: 14px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="game-box">
+
+  <div class="title">🟢 ユーザ登録画面</div>
+
+  <form method="post">
+    <div class="input-box">
+      ▶ ユーザID(半角英数字4～10文字)<br>
+      <input name="username">
+    </div>
+
+    <div class="input-box">
+      ▶ パスワード(半角英数字4～10文字)<br>
+      <input type="password" name="password">
+    </div>
+
+    <button>登録</button>
+  </form>
+
+  <div class="link">
+    <a href="/">▶ ログインへ戻る</a>
+  </div>
+
+  <div class="message-box">
+    {% if error %}
+      <span style="color:red;">
+        ▶ エラー！<br>
+        ▶ {{ error }}
+      </span>
+    {% else %}
+      ▶ 本システムの登録は無料です
+    {% endif %}
+  </div>
+
+</div>
+
+</body>
+</html>
