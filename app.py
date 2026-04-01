@@ -68,6 +68,17 @@ def is_valid(text):
 @app.route("/", methods=["GET", "POST"])
 def login():
     error = None
+    
+    # --- 利用者数を取得する処理を追加 ---
+    conn = get_db()
+    # sqlite_sequenceテーブルからusersの現在のseq値を取得
+    row = conn.execute(
+        "SELECT seq FROM sqlite_sequence WHERE name='users'"
+    ).fetchone()
+    
+    # データがあればその値を、なければ0をセット
+    user_count = row["seq"] if row else 0
+    # ----------------------------------
 
     if request.method == "POST":
         user = request.form["username"]
@@ -90,7 +101,7 @@ def login():
         else:
             error = "ユーザー名またはパスワードが違います"
 
-    return render_template("login.html", error=error)
+    return render_template("login.html", error=error, user_count=user_count)
 
 # ---------------- 管理画面 ----------------
 @app.route("/manage", methods=["GET", "POST"])
